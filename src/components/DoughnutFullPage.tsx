@@ -68,7 +68,7 @@ export function DoughnutFullPage({ data, onReady }: Props) {
     const { w, h } = dims
     const cx = w / 2
     const cy = h / 2
-    const R = Math.min(w * 0.34, h * 0.40)
+    const R = Math.min(w * 0.32, h * 0.38)
     const coreR = R * 0.10
     const shortfallR = R * 0.42
     const greenIn = R * 0.44
@@ -77,6 +77,9 @@ export function DoughnutFullPage({ data, onReady }: Props) {
     const ecoMaxExt = R * 0.26
     const iconSocialR = R * 0.76
     const iconEcoR = ecoIn + ecoMaxExt + R * 0.14
+    /* label radius: middle of each ring so text sits ON the wedge */
+    const labelSocialR = (coreR + shortfallR) / 2
+    const labelEcoR = ecoIn + ecoMaxExt * 0.45
 
     const socialAngle = d3.scaleBand()
       .domain(social.map(d => d.id))
@@ -87,7 +90,7 @@ export function DoughnutFullPage({ data, onReady }: Props) {
       .range([0, 2 * Math.PI])
       .paddingInner(0.04)
 
-    return { cx, cy, R, coreR, shortfallR, greenIn, greenOut, ecoIn, ecoMaxExt, iconSocialR, iconEcoR, socialAngle, ecoAngle }
+    return { cx, cy, R, coreR, shortfallR, greenIn, greenOut, ecoIn, ecoMaxExt, iconSocialR, iconEcoR, labelSocialR, labelEcoR, socialAngle, ecoAngle }
   }, [dims, social, ecological])
 
   /* D3 rendering — only geometry, no text labels */
@@ -159,17 +162,17 @@ export function DoughnutFullPage({ data, onReady }: Props) {
     return () => { void svg.selectAll('*').remove() }
   }, [data, dims, layout, handleClick, social, ecological, onReady])
 
-  /* compute HTML-overlay icon positions */
+  /* compute HTML-overlay positions — ON the wedge (middle of each ring) */
   const socialIcons = useMemo(() => social.map(d => {
     const start = layout.socialAngle(d.id) ?? 0
     const mid = start + (layout.socialAngle.bandwidth() ?? 0) / 2 - Math.PI / 2
-    return { m: d, x: layout.cx + layout.iconSocialR * Math.cos(mid), y: layout.cy + layout.iconSocialR * Math.sin(mid) }
+    return { m: d, x: layout.cx + layout.labelSocialR * Math.cos(mid), y: layout.cy + layout.labelSocialR * Math.sin(mid) }
   }), [social, layout])
 
   const ecoIcons = useMemo(() => ecological.map(d => {
     const start = layout.ecoAngle(d.id) ?? 0
     const mid = start + (layout.ecoAngle.bandwidth() ?? 0) / 2 - Math.PI / 2
-    return { m: d, x: layout.cx + layout.iconEcoR * Math.cos(mid), y: layout.cy + layout.iconEcoR * Math.sin(mid) }
+    return { m: d, x: layout.cx + layout.labelEcoR * Math.cos(mid), y: layout.cy + layout.labelEcoR * Math.sin(mid) }
   }), [ecological, layout])
 
   return (
@@ -182,29 +185,39 @@ export function DoughnutFullPage({ data, onReady }: Props) {
       {/* SVG chart */}
       <svg ref={svgRef} className="absolute inset-0 z-10" />
 
-      {/* HTML icon ring — social (outside green ring) */}
+      {/* Labels ON the inner (social) wheel — centered on each wedge */}
       {socialIcons.map(({ m, x, y }) => (
         <div
           key={m.id}
-          className="absolute z-20 flex flex-col items-center pointer-events-none select-none"
-          style={{ left: x, top: y, transform: 'translate(-50%,-50%)' }}
+          className="absolute z-20 flex flex-col items-center justify-center pointer-events-none select-none"
+          style={{
+            left: x,
+            top: y,
+            transform: 'translate(-50%,-50%)',
+            textShadow: '0 0 2px #000, 0 0 4px #000, 0 1px 3px #000, 0 2px 6px rgba(0,0,0,0.8), 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000',
+          }}
         >
-          <span className="text-lg leading-none">{getMetricIcon(m.id)}</span>
-          <span className="text-[8px] font-bold tracking-wider text-white/50 uppercase mt-0.5 whitespace-nowrap">
+          <span className="text-sm leading-none drop-shadow-[0_0_4px_rgba(0,0,0,0.9)]">{getMetricIcon(m.id)}</span>
+          <span className="text-[8px] font-bold tracking-wide text-white uppercase mt-0.5 whitespace-nowrap leading-tight">
             {m.label}
           </span>
         </div>
       ))}
 
-      {/* HTML icon ring — eco (beyond outer wedges) */}
+      {/* Labels ON the outer (ecological) wheel — centered on each wedge */}
       {ecoIcons.map(({ m, x, y }) => (
         <div
           key={m.id}
-          className="absolute z-20 flex flex-col items-center pointer-events-none select-none"
-          style={{ left: x, top: y, transform: 'translate(-50%,-50%)' }}
+          className="absolute z-20 flex flex-col items-center justify-center pointer-events-none select-none"
+          style={{
+            left: x,
+            top: y,
+            transform: 'translate(-50%,-50%)',
+            textShadow: '0 0 2px #000, 0 0 4px #000, 0 1px 3px #000, 0 2px 6px rgba(0,0,0,0.8), 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000',
+          }}
         >
-          <span className="text-lg leading-none">{getMetricIcon(m.id)}</span>
-          <span className="text-[8px] font-bold tracking-wider text-white/40 uppercase mt-0.5 whitespace-nowrap">
+          <span className="text-sm leading-none drop-shadow-[0_0_4px_rgba(0,0,0,0.9)]">{getMetricIcon(m.id)}</span>
+          <span className="text-[8px] font-bold tracking-wide text-white uppercase mt-0.5 whitespace-nowrap leading-tight">
             {m.label}
           </span>
         </div>
@@ -213,14 +226,14 @@ export function DoughnutFullPage({ data, onReady }: Props) {
       {/* center label (HTML for crispness) */}
       <div
         className="absolute z-20 pointer-events-none select-none text-center"
-        style={{ left: layout.cx, top: layout.cy, transform: 'translate(-50%,-50%)' }}
+        style={{ left: layout.cx, top: layout.cy, transform: 'translate(-50%,-50%)', textShadow: '0 0 12px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.9)' }}
       >
-        <div className="text-[9px] font-bold tracking-[0.12em] text-white/60 leading-tight">SOCIAL</div>
-        <div className="text-[7px] font-medium tracking-[0.10em] text-white/35 leading-tight">FOUNDATION</div>
+        <div className="text-[9px] font-bold tracking-[0.12em] text-white/80 leading-tight">SOCIAL</div>
+        <div className="text-[7px] font-medium tracking-[0.10em] text-white/60 leading-tight">FOUNDATION</div>
       </div>
 
-      {/* left panel — social */}
-      <div className="absolute left-0 top-0 bottom-0 w-48 flex flex-col justify-center gap-2.5 py-12 pl-4 pr-2 z-20">
+      {/* left panel — social: wide enough to show all text */}
+      <div className="absolute left-0 top-0 bottom-0 w-[min(22rem,28vw)] min-w-[200px] flex flex-col justify-center gap-3 py-12 pl-5 pr-4 z-20 bg-gradient-to-r from-black/85 via-black/60 to-transparent pointer-events-auto">
         {social.map(m => {
           const shortfall = Math.max(0, Math.round(100 - m.value))
           const subs = SUB_METRICS[m.id] ?? ['—', '—']
@@ -228,15 +241,15 @@ export function DoughnutFullPage({ data, onReady }: Props) {
           return (
             <div key={m.id} onClick={() => handleClick(m)}
               className={`cursor-pointer transition-all duration-150 ${isHov ? 'opacity-100 translate-x-0.5' : 'opacity-60 hover:opacity-80'}`}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[10px] font-bold tracking-wider text-white/90 uppercase truncate">{m.label}</span>
-                <span className="text-[9px] font-semibold text-orange-400 tabular-nums flex-shrink-0">{shortfall > 0 ? `-${shortfall}%` : 'OK'}</span>
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <span className="text-xs font-bold tracking-wider text-white uppercase min-w-0 break-words">{m.label}</span>
+                <span className="text-[10px] font-semibold text-orange-400 tabular-nums flex-shrink-0">{shortfall > 0 ? `-${shortfall}%` : 'OK'}</span>
               </div>
               <div className="h-px bg-white/10 my-0.5" />
               {subs.map(s => (
-                <div key={s} className="flex items-center gap-1.5">
-                  <span className="w-1 h-1 rounded-sm bg-orange-500/70 flex-shrink-0" />
-                  <span className="text-[9px] text-white/40 truncate">{s}</span>
+                <div key={s} className="flex items-start gap-1.5">
+                  <span className="w-1 h-1 rounded-sm bg-orange-500/70 flex-shrink-0 mt-1.5" />
+                  <span className="text-[10px] text-white/50 leading-snug break-words">{s}</span>
                 </div>
               ))}
             </div>
@@ -244,8 +257,8 @@ export function DoughnutFullPage({ data, onReady }: Props) {
         })}
       </div>
 
-      {/* right panel — ecological */}
-      <div className="absolute right-0 top-0 bottom-0 w-48 flex flex-col justify-center gap-2.5 py-12 pr-4 pl-2 z-20">
+      {/* right panel — ecological: wide enough to show all text */}
+      <div className="absolute right-0 top-0 bottom-0 w-[min(22rem,28vw)] min-w-[200px] flex flex-col justify-center gap-3 py-12 pr-5 pl-4 z-20 bg-gradient-to-l from-black/85 via-black/60 to-transparent pointer-events-auto">
         {ecological.map(m => {
           const overshoot = Math.max(0, Math.round(m.value - 100))
           const subs = SUB_METRICS[m.id] ?? ['—', '—']
@@ -253,15 +266,15 @@ export function DoughnutFullPage({ data, onReady }: Props) {
           return (
             <div key={m.id} onClick={() => handleClick(m)}
               className={`cursor-pointer transition-all duration-150 text-right ${isHov ? 'opacity-100 -translate-x-0.5' : 'opacity-60 hover:opacity-80'}`}>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[9px] font-semibold text-red-400 tabular-nums flex-shrink-0">{overshoot > 0 ? `+${overshoot}%` : 'OK'}</span>
-                <span className="text-[10px] font-bold tracking-wider text-white/90 uppercase truncate">{m.label}</span>
+              <div className="flex items-center justify-between gap-2 min-w-0 flex-row-reverse">
+                <span className="text-xs font-bold tracking-wider text-white uppercase min-w-0 break-words text-right">{m.label}</span>
+                <span className="text-[10px] font-semibold text-red-400 tabular-nums flex-shrink-0">{overshoot > 0 ? `+${overshoot}%` : 'OK'}</span>
               </div>
               <div className="h-px bg-white/10 my-0.5" />
               {subs.map(s => (
-                <div key={s} className="flex items-center justify-end gap-1.5">
-                  <span className="text-[9px] text-white/40 truncate">{s}</span>
-                  <span className="w-1 h-1 rounded-sm bg-red-500/70 flex-shrink-0" />
+                <div key={s} className="flex items-start justify-end gap-1.5">
+                  <span className="text-[10px] text-white/50 leading-snug break-words text-right">{s}</span>
+                  <span className="w-1 h-1 rounded-sm bg-red-500/70 flex-shrink-0 mt-1.5" />
                 </div>
               ))}
             </div>
