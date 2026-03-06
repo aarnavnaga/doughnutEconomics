@@ -1,0 +1,17 @@
+id,label,ring,value,unit,description
+climate,Climate Change,ecological,142,%,GHG emissions vs planetary boundary
+nitrogen,Nitrogen Loading,ecological,118,%,Fertilizer runoff livestock
+water,Freshwater Use,ecological,165,%,Withdrawal vs sustainable yield
+ozone,Ozone Depletion,ecological,85,%,Stratospheric ozone
+land,Land Use Change,ecological,128,%,Deforestation conversion
+biodiversity,Biodiversity Loss,ecological,135,%,Species extinction rate
+ocean,Ocean Acidification,ecological,95,%,CO2 absorption
+air,Air Quality,ecological,112,%,PM2.5 ozone pollution
+housing,Housing,social,58,%,Affordable housing access
+energy,Energy Access,social,88,%,Reliable electricity
+health,Health,social,72,%,Healthcare access
+equity,Social Equity,social,52,%,Income equality opportunity
+education,Education,social,78,%,Quality education access
+food,Food Security,social,82,%,Nutritional adequacy
+jobs,Decent Work,social,68,%,Living wage safety
+community,Community,social,75,%,Social cohesion

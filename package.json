@@ -1,0 +1,32 @@
+{
+  "name": "california-doughnut-navigator",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "d3": "^7.8.5",
+    "framer-motion": "^12.34.0",
+    "papaparse": "^5.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.13.0",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  }
+}

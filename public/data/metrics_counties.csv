@@ -1,0 +1,17 @@
+id,label,ring,value,unit,Los Angeles,San Diego,Santa Clara,Orange,Sacramento,Alameda,San Francisco,Riverside,San Bernardino,Fresno
+climate,Climate Change,ecological,142,%,148,138,135,145,140,132,128,155,152,145
+nitrogen,Nitrogen Loading,ecological,118,%,115,120,105,118,125,110,98,130,128,135
+water,Freshwater Use,ecological,165,%,170,160,155,168,175,158,150,180,178,185
+ozone,Ozone Depletion,ecological,85,%,82,88,90,84,83,87,92,80,78,82
+land,Land Use Change,ecological,128,%,130,125,135,128,120,132,140,122,118,115
+biodiversity,Biodiversity Loss,ecological,135,%,138,132,140,136,130,138,142,128,125,122
+ocean,Ocean Acidification,ecological,95,%,94,96,97,95,93,96,98,92,91,90
+air,Air Quality,ecological,112,%,118,108,105,115,110,102,98,122,125,108
+housing,Housing,social,58,%,52,55,48,50,62,45,42,55,58,65
+energy,Energy Access,social,88,%,85,90,92,88,86,91,95,82,80,84
+health,Health,social,72,%,68,75,78,73,70,76,80,65,62,68
+equity,Social Equity,social,52,%,48,54,58,50,55,60,65,45,42,50
+education,Education,social,78,%,75,80,85,78,76,82,88,72,70,74
+food,Food Security,social,82,%,80,84,86,82,80,85,88,78,76,82
+jobs,Decent Work,social,68,%,65,70,75,68,66,72,78,62,60,64
+community,Community,social,75,%,72,77,80,74,73,78,82,70,68,76
