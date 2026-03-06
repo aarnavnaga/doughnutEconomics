@@ -2,6 +2,12 @@
 
 An interactive, gamified web dashboard that turns the California Doughnut report into an "X-ray machine" for ecological overshoot and social shortfall.
 
+## Summary
+
+**What:** A web app that visualizes California’s performance on Doughnut Economics metrics—ecological overshoot (outer ring) and social shortfall (inner ring)—with a policy sandbox, county comparisons, and gamified quests.
+
+**Why:** To make the California Doughnut report accessible and actionable. Users can explore trade-offs, test policy levers, and see how different counties perform, so policymakers, students, and citizens can understand and act on sustainability and equity data.
+
 **Data source:** [The California Doughnut Snapshot and Report](https://zenodo.org/records/17540639) (Aritza & Kraus-Polk et al., 2025). California falls short on 100% of social indicators and overshoots 89% of ecological indicators.
 
 ## Quick Start
